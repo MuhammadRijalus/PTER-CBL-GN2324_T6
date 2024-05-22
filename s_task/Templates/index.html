@@ -43,7 +43,8 @@
                <td>{{ row['type'] }}</td>
                <td>{{ row['price'] }}</td>
                <td>
-                  <a href="{{'delete'}}/{{row['id']}}">Hapus Data</a>
+                  <a href="{{'delete'}}/{{row['id']}}">Hapus</a>
+                  <a href="{{'edit'}}/{{row['id']}}">Edit</a>
                </td>
             </tr>
             {% endfor %}

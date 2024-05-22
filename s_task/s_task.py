@@ -49,7 +49,6 @@ def index():
 @app.route('/add', methods = ["GET", "POST"])
 def addCars() :
    if request.method == "POST" :
-      # cid = int(request.form['cid'])
       cid = request.form['cid']
       cname = request.form['cname']
       ctype = request.form['ctype']
@@ -72,6 +71,36 @@ def addCars() :
          flash('Data Mobil Gagal ditambahkan', 'failed')
 
    return render_template('addCars.html')
+
+@app.route('/edit/<id>', methods = ["GET", "POST"])
+def editCars(id) :
+   conn = dbConn()
+   data = conn.execute(f"SELECT * FROM cars WHERE id = {id}").fetchone()
+
+   if request.method == "POST" :
+      cname = request.form['cname']
+      ctype = request.form['ctype']
+      cprice = request.form['cprice']
+
+      if cname != '' and ctype != '' and cprice != '' :
+         conn = dbConn()
+         conn.execute(
+            f"""
+            UPDATE cars SET 
+            brand = ?, 
+            type = ?, 
+            price = ? 
+            WHERE id = {id}
+            """, (cname, ctype, cprice)
+         )
+         conn.commit()
+         conn.close()
+         flash('Data Mobil Berhasil diubah', 'success')
+         return redirect(url_for('index'))
+      else :
+         flash('Data Mobil Gagal diubah', 'failed')
+
+   return render_template('editCars.html', row = data)
 
 @app.route('/delete/<id>')
 def delete(id) :
